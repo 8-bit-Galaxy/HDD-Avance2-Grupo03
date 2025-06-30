@@ -1,7 +1,7 @@
 <?php
-// Validación del funcionamiento del login utilizando el parámetro de ci.yml
 require_once 'config.php';
 
+/** @var \PDO $conn */
 if (!($conn instanceof PDO)) {
    die('Error: No se pudo conectar a la base de datos.');
 }
@@ -12,22 +12,21 @@ if (isset($_POST['submit'])) {
    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
    $pass_raw = $_POST['pass'];
    $pass = filter_var($pass_raw, FILTER_SANITIZE_STRING);
-   $pass_md5 = md5($pass); // Nota: Considera usar password_hash en proyectos reales
+   $pass_md5 = md5($pass); // Nota: para producción usar password_hash y password_verify
 
    try {
-      $sql = "SELECT * FROM users WHERE email = ? AND password = ?";
-      $stmt = $conn->prepare($sql);
+      $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
       $stmt->execute([$email, $pass_md5]);
 
       if ($stmt->rowCount() > 0) {
-         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-         if ($row['user_type'] === 'admin') {
-            $_SESSION['admin_id'] = $row['id'];
+         if ($user['user_type'] === 'admin') {
+            $_SESSION['admin_id'] = $user['id'];
             header('Location: admin_page.php');
             exit;
-         } elseif ($row['user_type'] === 'user') {
-            $_SESSION['user_id'] = $row['id'];
+         } elseif ($user['user_type'] === 'user') {
+            $_SESSION['user_id'] = $user['id'];
             header('Location: home.php');
             exit;
          } else {
@@ -71,7 +70,6 @@ if (isset($message)) {
 ?>
 
 <section class="form-container">
-
    <form action="" method="POST">
       <h3>Inicia sesión ahora</h3>
       <input type="email" name="email" class="box" placeholder="Ingresa tu email" required>
@@ -79,7 +77,6 @@ if (isset($message)) {
       <input type="submit" value="Inicia sesión ahora" class="btn" name="submit">
       <p>¿No tienes una cuenta? <a href="register.php">Regístrate ahora</a></p>
    </form>
-
 </section>
 
 </body>

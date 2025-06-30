@@ -2,17 +2,20 @@
 
 require_once 'config.php';
 
+/** @var \PDO $conn */
 if (!($conn instanceof PDO)) {
    die('Error: No se pudo conectar a la base de datos.');
 }
+
+$message = [];
 
 if (isset($_POST['submit'])) {
 
    $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
 
-   $pass_raw = $_POST['pass'];
-   $cpass_raw = $_POST['cpass'];
+   $pass_raw = $_POST['pass'] ?? '';
+   $cpass_raw = $_POST['cpass'] ?? '';
 
    $pass = filter_var($pass_raw, FILTER_SANITIZE_STRING);
    $cpass = filter_var($cpass_raw, FILTER_SANITIZE_STRING);
@@ -20,10 +23,10 @@ if (isset($_POST['submit'])) {
    $pass_hash = md5($pass);
    $cpass_hash = md5($cpass);
 
-   $image = $_FILES['image']['name'];
+   $image = $_FILES['image']['name'] ?? '';
    $image = filter_var($image, FILTER_SANITIZE_STRING);
-   $image_size = $_FILES['image']['size'];
-   $image_tmp_name = $_FILES['image']['tmp_name'];
+   $image_size = $_FILES['image']['size'] ?? 0;
+   $image_tmp_name = $_FILES['image']['tmp_name'] ?? '';
    $image_folder = 'uploaded_img/' . $image;
 
    $select = $conn->prepare("SELECT * FROM users WHERE email = ?");
@@ -67,17 +70,14 @@ if (isset($_POST['submit'])) {
 </head>
 <body>
 
-<?php
-if (isset($message)) {
-   foreach ($message as $msg) {
-      echo '
+<?php if (!empty($message)): ?>
+   <?php foreach ($message as $msg): ?>
       <div class="message">
-         <span>' . htmlspecialchars($msg) . '</span>
+         <span><?= htmlspecialchars($msg) ?></span>
          <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
-      </div>';
-   }
-}
-?>
+      </div>
+   <?php endforeach; ?>
+<?php endif; ?>
 
 <section class="form-container">
 

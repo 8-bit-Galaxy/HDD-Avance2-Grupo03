@@ -2,6 +2,9 @@
 
 require_once 'config.php';
 
+/** @var \PDO $conn */
+/** @var string|null $user_id */
+
 if (!($conn instanceof PDO)) {
    die('Error: No se pudo establecer conexión con la base de datos.');
 }
