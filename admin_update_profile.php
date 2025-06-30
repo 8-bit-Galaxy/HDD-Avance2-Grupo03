@@ -2,6 +2,10 @@
 
 @include 'config.php';
 
+/** @var \PDO $conn */
+/** @var string|null $admin_id */
+/** @var array $fetch_profile */
+
 session_start();
 
 $admin_id = $_SESSION['admin_id'];
@@ -17,7 +21,7 @@ if(isset($_POST['update_profile'])){
    $email = $_POST['email'];
    $email = filter_var($email, FILTER_SANITIZE_STRING);
 
-   $update_profile = $conn->prepare("UPDATE `users` SET name = ?, email = ? WHERE id = ?");
+   $update_profile = $conn->prepare("UPDATE users SET name = ?, email = ? WHERE id = ?");
    $update_profile->execute([$name, $email, $admin_id]);
 
    $image = $_FILES['image']['name'];
@@ -31,7 +35,7 @@ if(isset($_POST['update_profile'])){
       if($image_size > 2000000){
          $message[] = 'El tamaño de la imagen es demasiado grande!';
       }else{
-         $update_image = $conn->prepare("UPDATE `users` SET image = ? WHERE id = ?");
+         $update_image = $conn->prepare("UPDATE users SET image = ? WHERE id = ?");
          $update_image->execute([$image, $admin_id]);
          if($update_image){
             move_uploaded_file($image_tmp_name, $image_folder);
@@ -55,7 +59,7 @@ if(isset($_POST['update_profile'])){
       }elseif($new_pass != $confirm_pass){
          $message[] = 'Confirme que la contraseña no coincide!';
       }else{
-         $update_pass_query = $conn->prepare("UPDATE `users` SET password = ? WHERE id = ?");
+         $update_pass_query = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
          $update_pass_query->execute([$confirm_pass, $admin_id]);
          $message[] = 'Contraseña actualizada exitosamente!';
       }
@@ -112,23 +116,11 @@ if(isset($_POST['update_profile'])){
       </div>
       <div class="flex-btn">
          <input type="submit" class="btn" value="actualizar perfil" name="update_profile">
-         <a href="admin_page.php" class="option-btn">ir atras</a>
+         <a href="admin_page.php" class="option-btn">ir atrás</a>
       </div>
    </form>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <script src="js/script.js"></script>
 

@@ -2,6 +2,9 @@
 
 @include 'config.php';
 
+/** @var \PDO $conn */
+/** @var string|null $admin_id */
+
 session_start();
 
 $admin_id = $_SESSION['admin_id'];
@@ -29,7 +32,7 @@ if(isset($_POST['update_product'])){
    $image_folder = 'uploaded_img/'.$image;
    $old_image = $_POST['old_image'];
 
-   $update_product = $conn->prepare("UPDATE `products` SET name = ?, category = ?, details = ?, price = ? WHERE id = ?");
+   $update_product = $conn->prepare("UPDATE products SET name = ?, category = ?, details = ?, price = ? WHERE id = ?");
    $update_product->execute([$name, $category, $details, $price, $pid]);
 
    $message[] = 'Producto actualizado exitosamente!';
@@ -39,7 +42,7 @@ if(isset($_POST['update_product'])){
          $message[] = 'El tamaño de la imagen es demasiado grande!';
       }else{
 
-         $update_image = $conn->prepare("UPDATE `products` SET image = ? WHERE id = ?");
+         $update_image = $conn->prepare("UPDATE products SET image = ? WHERE id = ?");
          $update_image->execute([$image, $pid]);
 
          if($update_image){
@@ -79,7 +82,7 @@ if(isset($_POST['update_product'])){
 
    <?php
       $update_id = $_GET['update'];
-      $select_products = $conn->prepare("SELECT * FROM `products` WHERE id = ?");
+      $select_products = $conn->prepare("SELECT * FROM products WHERE id = ?");
       $select_products->execute([$update_id]);
       if($select_products->rowCount() > 0){
          while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
@@ -101,7 +104,7 @@ if(isset($_POST['update_product'])){
       <input type="file" name="image" class="box" accept="image/jpg, image/jpeg, image/png">
       <div class="flex-btn">
          <input type="submit" class="btn" value="actualizar producto" name="update_product">
-         <a href="admin_products.php" class="option-btn">ir atras</a>
+         <a href="admin_products.php" class="option-btn">ir atrás</a>
       </div>
    </form>
    <?php
@@ -112,18 +115,6 @@ if(isset($_POST['update_product'])){
    ?>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <script src="js/script.js"></script>
 
