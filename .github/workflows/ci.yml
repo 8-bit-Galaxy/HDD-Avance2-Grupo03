@@ -2,9 +2,9 @@ name: CI - Validación de PHP
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   syntax-check:
