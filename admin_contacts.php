@@ -2,6 +2,9 @@
 
 @include 'config.php';
 
+/** @var \PDO $conn */
+/** @var string|null $admin_id */
+
 session_start();
 
 $admin_id = $_SESSION['admin_id'];
@@ -13,7 +16,7 @@ if(!isset($admin_id)){
 if(isset($_GET['delete'])){
 
    $delete_id = $_GET['delete'];
-   $delete_message = $conn->prepare("DELETE FROM `message` WHERE id = ?");
+   $delete_message = $conn->prepare("DELETE FROM message WHERE id = ?");
    $delete_message->execute([$delete_id]);
    header('location:admin_contacts.php');
 
@@ -47,7 +50,7 @@ if(isset($_GET['delete'])){
    <div class="box-container">
 
    <?php
-      $select_message = $conn->prepare("SELECT * FROM `message`");
+      $select_message = $conn->prepare("SELECT * FROM message");
       $select_message->execute();
       if($select_message->rowCount() > 0){
          while($fetch_message = $select_message->fetch(PDO::FETCH_ASSOC)){
@@ -70,18 +73,6 @@ if(isset($_GET['delete'])){
    </div>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <script src="js/script.js"></script>
 
