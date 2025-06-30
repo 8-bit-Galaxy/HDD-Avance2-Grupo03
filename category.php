@@ -2,12 +2,16 @@
 
 @include 'config.php';
 
+/** @var \PDO $conn */
+/** @var string|null $user_id */
+
 session_start();
 
 $user_id = $_SESSION['user_id'];
 
 if(!isset($user_id)){
    header('location:login.php');
+   exit();
 };
 
 if(isset($_POST['add_to_wishlist'])){
@@ -21,10 +25,10 @@ if(isset($_POST['add_to_wishlist'])){
    $p_image = $_POST['p_image'];
    $p_image = filter_var($p_image, FILTER_SANITIZE_STRING);
 
-   $check_wishlist_numbers = $conn->prepare("SELECT * FROM `wishlist` WHERE name = ? AND user_id = ?");
+   $check_wishlist_numbers = $conn->prepare("SELECT * FROM wishlist WHERE name = ? AND user_id = ?");
    $check_wishlist_numbers->execute([$p_name, $user_id]);
 
-   $check_cart_numbers = $conn->prepare("SELECT * FROM `cart` WHERE name = ? AND user_id = ?");
+   $check_cart_numbers = $conn->prepare("SELECT * FROM cart WHERE name = ? AND user_id = ?");
    $check_cart_numbers->execute([$p_name, $user_id]);
 
    if($check_wishlist_numbers->rowCount() > 0){
@@ -32,7 +36,7 @@ if(isset($_POST['add_to_wishlist'])){
    }elseif($check_cart_numbers->rowCount() > 0){
       $message[] = 'Ya agregado al carrito!';
    }else{
-      $insert_wishlist = $conn->prepare("INSERT INTO `wishlist`(user_id, pid, name, price, image) VALUES(?,?,?,?,?)");
+      $insert_wishlist = $conn->prepare("INSERT INTO wishlist(user_id, pid, name, price, image) VALUES(?,?,?,?,?)");
       $insert_wishlist->execute([$user_id, $pid, $p_name, $p_price, $p_image]);
       $message[] = 'añadido a la lista de deseos!';
    }
@@ -52,22 +56,22 @@ if(isset($_POST['add_to_cart'])){
    $p_qty = $_POST['p_qty'];
    $p_qty = filter_var($p_qty, FILTER_SANITIZE_STRING);
 
-   $check_cart_numbers = $conn->prepare("SELECT * FROM `cart` WHERE name = ? AND user_id = ?");
+   $check_cart_numbers = $conn->prepare("SELECT * FROM cart WHERE name = ? AND user_id = ?");
    $check_cart_numbers->execute([$p_name, $user_id]);
 
    if($check_cart_numbers->rowCount() > 0){
       $message[] = 'Ya agregado al carrito!';
    }else{
 
-      $check_wishlist_numbers = $conn->prepare("SELECT * FROM `wishlist` WHERE name = ? AND user_id = ?");
+      $check_wishlist_numbers = $conn->prepare("SELECT * FROM wishlist WHERE name = ? AND user_id = ?");
       $check_wishlist_numbers->execute([$p_name, $user_id]);
 
       if($check_wishlist_numbers->rowCount() > 0){
-         $delete_wishlist = $conn->prepare("DELETE FROM `wishlist` WHERE name = ? AND user_id = ?");
+         $delete_wishlist = $conn->prepare("DELETE FROM wishlist WHERE name = ? AND user_id = ?");
          $delete_wishlist->execute([$p_name, $user_id]);
       }
 
-      $insert_cart = $conn->prepare("INSERT INTO `cart`(user_id, pid, name, price, quantity, image) VALUES(?,?,?,?,?,?)");
+      $insert_cart = $conn->prepare("INSERT INTO cart(user_id, pid, name, price, quantity, image) VALUES(?,?,?,?,?,?)");
       $insert_cart->execute([$user_id, $pid, $p_name, $p_price, $p_qty, $p_image]);
       $message[] = 'añadido al carrito!';
    }
@@ -103,7 +107,7 @@ if(isset($_POST['add_to_cart'])){
 
    <?php
       $category_name = $_GET['category'];
-      $select_products = $conn->prepare("SELECT * FROM `products` WHERE category = ?");
+      $select_products = $conn->prepare("SELECT * FROM products WHERE category = ?");
       $select_products->execute([$category_name]);
       if($select_products->rowCount() > 0){
          while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
@@ -131,12 +135,6 @@ if(isset($_POST['add_to_cart'])){
    </div>
 
 </section>
-
-
-
-
-
-
 
 <?php include 'footer.php'; ?>
 

@@ -2,21 +2,25 @@
 
 @include 'config.php';
 
+/** @var \PDO $conn */
+/** @var string|null $admin_id */
+
 session_start();
 
 $admin_id = $_SESSION['admin_id'];
 
 if(!isset($admin_id)){
    header('location:login.php');
+   exit();
 };
 
 if(isset($_GET['delete'])){
 
    $delete_id = $_GET['delete'];
-   $delete_users = $conn->prepare("DELETE FROM `users` WHERE id = ?");
+   $delete_users = $conn->prepare("DELETE FROM users WHERE id = ?");
    $delete_users->execute([$delete_id]);
    header('location:admin_users.php');
-
+   exit();
 }
 
 ?>
@@ -47,7 +51,7 @@ if(isset($_GET['delete'])){
    <div class="box-container">
 
       <?php
-         $select_users = $conn->prepare("SELECT * FROM `users`");
+         $select_users = $conn->prepare("SELECT * FROM users");
          $select_users->execute();
          while($fetch_users = $select_users->fetch(PDO::FETCH_ASSOC)){
       ?>
@@ -56,27 +60,19 @@ if(isset($_GET['delete'])){
          <p> id de usuario : <span><?= $fetch_users['id']; ?></span></p>
          <p> nombre de usuario : <span><?= $fetch_users['name']; ?></span></p>
          <p> email : <span><?= $fetch_users['email']; ?></span></p>
-         <p> tipo de usuario : <span style=" color:<?php if($fetch_users['user_type'] == 'admin'){ echo 'orange'; }; ?>"><?= $fetch_users['user_type']; ?></span></p>
-         <a href="admin_users.php?delete=<?= $fetch_users['id']; ?>" onclick="return confirm('eliminar este usuario?');" class="delete-btn">elimianr</a>
+         <p> tipo de usuario : 
+            <span style="color:<?php if($fetch_users['user_type'] == 'admin'){ echo 'orange'; }; ?>">
+               <?= $fetch_users['user_type']; ?>
+            </span>
+         </p>
+         <a href="admin_users.php?delete=<?= $fetch_users['id']; ?>" onclick="return confirm('¿Eliminar este usuario?');" class="delete-btn">eliminar</a>
       </div>
       <?php
-      }
+         }
       ?>
    </div>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <script src="js/script.js"></script>
 
