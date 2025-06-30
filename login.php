@@ -1,5 +1,5 @@
 <?php
-
+//validacion del funcionamiento del login utilizando el parametro de ci.yml
 @include 'config.php';
 
 session_start();
