@@ -1,5 +1,5 @@
 <?php
-
+// Esto es una prueba para activar GitHub Actions para la integracion continua
 @include 'config.php';
 
 session_start();
