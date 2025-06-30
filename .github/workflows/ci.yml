@@ -1,0 +1,25 @@
+name: CI - Validación de PHP
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  syntax-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Validar sintaxis PHP
+        run: |
+          echo "Validando archivos PHP..."
+          find . -type f -name "*.php" -print0 | xargs -0 -n1 php -l
