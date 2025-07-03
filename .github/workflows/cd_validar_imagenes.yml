@@ -1,0 +1,19 @@
+name: Validar imágenes de productos
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  validar-imagenes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Validar extensiones y tamaños de imágenes
+        run: |
+          echo "🔎 Validando imágenes..."
+          find "imagenes productos/" -type f \( ! -iname ".jpg" ! -iname ".png" \) -exec echo "❌ Este archivo no está permitido: {}" \; -exec exit 1 \; || true
+          find "imagenes productos/" -type f -size +2M -exec echo "❌ El archivo es demasiado grande: {}" \; -exec exit 1 \; || true
