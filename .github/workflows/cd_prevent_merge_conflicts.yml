@@ -1,22 +1,23 @@
-name: Verificar rutas rotas
+name: Prevenir merges con conflictos
 
 on:
   push:
     branches:
-      - main   # Cambia a master si tu rama es master
+      - master
 
 jobs:
-  rutas-rotas:
+  check-conflicts:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Verificar imágenes inexistentes
+      - name: Buscar conflictos en archivos
         run: |
-          grep -o -h -r "imagenes productos/[^\"') ]*" . | sort -u | while read -r ruta; do
-            if [ ! -f "$ruta" ]; then
-              echo "❌ La imagen rota se encuentra aquí: $ruta"
-              exit 1
-            fi
-          done
+          echo "🔍 Buscando conflictos..."
+          if grep -r "<<<<<<<" .; then
+            echo "❌ Conflictos detectados. Corrígelos antes de subir."
+            exit 1
+          else
+            echo "✅ Sin conflictos."
+          fi
