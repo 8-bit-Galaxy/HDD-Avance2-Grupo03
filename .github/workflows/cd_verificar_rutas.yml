@@ -1,0 +1,22 @@
+name: Verificar rutas rotas
+
+on:
+  push:
+    branches:
+      - main   # Cambia a master si tu rama es master
+
+jobs:
+  rutas-rotas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Verificar imágenes inexistentes
+        run: |
+          grep -o -h -r "imagenes productos/[^\"') ]*" . | sort -u | while read -r ruta; do
+            if [ ! -f "$ruta" ]; then
+              echo "❌ La imagen rota se encuentra aquí: $ruta"
+              exit 1
+            fi
+          done
