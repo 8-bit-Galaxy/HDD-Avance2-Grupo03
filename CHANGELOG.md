@@ -1,4 +1,7 @@
 # CHANGELOG
+- Prueba de seguridad (Leonardo Future)
+- Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
+- Backup automático de base de datos [skip ci] (GitHub Actions)
 - Renombrar htmlint.yml a html_validacion.yml (Leonardo Future)
 - Backup automático de base de datos [skip ci] (GitHub Actions)
 - Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
