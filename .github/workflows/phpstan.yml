@@ -1,0 +1,27 @@
+name: Análisis de código con PHPStan
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Instalar PHP y dependencias
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Instalar PHPStan
+        run: |
+          composer global require phpstan/phpstan
+
+      - name: Ejecutar PHPStan
+        run: ~/.composer/vendor/bin/phpstan analyse --level=5 . || true
