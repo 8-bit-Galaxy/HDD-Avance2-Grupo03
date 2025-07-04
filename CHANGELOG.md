@@ -1,4 +1,7 @@
 # CHANGELOG
+- Prueba 1 (Leonardo Future)
+- Backup automático de base de datos [skip ci] (GitHub Actions)
+- Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
 - Actualización en el workflow de backup DB (Karla Castilla)
 - Modificacion de base de datos para probar backup (Karla Castilla)
 - Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
