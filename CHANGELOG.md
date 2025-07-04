@@ -1,4 +1,7 @@
 # CHANGELOG
+- Prueba de permisos (Leonardo Future)
+- Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
+- Backup automático de base de datos [skip ci] (GitHub Actions)
 - Prueba de seguridad (Leonardo Future)
 - Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
 - Backup automático de base de datos [skip ci] (GitHub Actions)
