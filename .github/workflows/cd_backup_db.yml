@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repo con historial completo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Crear backup de shop_db.sql si existe
         run: |
