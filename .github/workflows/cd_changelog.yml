@@ -12,20 +12,22 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - name: Generar archivo CHANGELOG.md
+      - name: Generar CHANGELOG.md
         run: |
-          echo "## Últimos cambios" > CHANGELOG.md
-          git log --pretty=format:"- %h %s (%an, %ad)" --date=short >> CHANGELOG.md
-          cat CHANGELOG.md
+          echo "# CHANGELOG" > CHANGELOG.md
+          git log --pretty=format:"- %s (%an)" >> CHANGELOG.md
 
       - name: Configurar autor del commit
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Commit y push de CHANGELOG.md
+      - name: Commit y push del changelog
         run: |
           git add CHANGELOG.md
           git diff-index --quiet HEAD || git commit -m "Actualizar CHANGELOG.md [skip ci]"
-          git push
+          git pull origin master --rebase
+          git push origin master
