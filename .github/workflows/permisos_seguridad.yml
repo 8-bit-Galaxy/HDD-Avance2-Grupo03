@@ -1,0 +1,21 @@
+name: Verificar permisos inseguros
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  permisos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Buscar archivos con permisos inseguros
+        run: |
+          echo "Buscando archivos con permisos 777..."
+          if find . -type f -perm 0777 | grep .; then
+            echo "❌ Archivos con permisos inseguros detectados"
+            exit 1
+          else
+            echo "✅ Todos los permisos están correctos"
+          fi

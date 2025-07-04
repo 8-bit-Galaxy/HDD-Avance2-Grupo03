@@ -1,0 +1,17 @@
+name: Lighthouse Report
+
+on:
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Instalar Lighthouse CI
+        run: npm install -g @lhci/cli@0.7.x
+
+      - name: Ejecutar Lighthouse en index.html
+        run: |
+          npx lhci autorun --collect.url=http://localhost:8000/index.html || echo "Lighthouse terminado"

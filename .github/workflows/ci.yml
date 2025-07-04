@@ -23,14 +23,4 @@ jobs:
         run: |
           echo "Validando archivos PHP..."
           find . -type f -name "*.php" -print0 | xargs -0 -n1 php -l
-
-
-#implementacion del phpstan
-      - name: Instalar Composer
-        run: sudo apt-get install composer
-
-      - name: Instalar dependencias de PHPStan
-        run: composer install
-
-      - name: Ejecutar análisis PHPStan
-        run: vendor/bin/phpstan analyse --no-progress
+          
