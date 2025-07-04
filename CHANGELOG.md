@@ -1,4 +1,7 @@
 # CHANGELOG
+- Actualización en el workflow de backup DB (Karla Castilla)
+- Modificacion de base de datos para probar backup (Karla Castilla)
+- Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
 - Commit vacío para probar el archivo changelog (Karla Castilla)
 - Actualizar CHANGELOG.md [skip ci] (GitHub Actions)
 - Backup automático de base de datos [skip ci] (GitHub Actions)
