@@ -8,6 +8,7 @@ on:
 jobs:
   backup-db:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -16,9 +17,9 @@ jobs:
         run: |
           if test -f db/shop_db.sql; then
             cp db/shop_db.sql db/backup_$(date +%Y%m%d_%H%M%S).sql
-            echo "Backup creado en carpeta db/"
+            echo "✅ Backup creado en carpeta db/"
           else
-            echo "No se encontró el archivo db/shop_db.sql"
+            echo "❌ No se encontró el archivo db/shop_db.sql"
           fi
 
       - name: Configurar autor del commit
@@ -26,8 +27,9 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Subir backup al repositorio
+      - name: Commit y push del backup
         run: |
           git add db/backup_*.sql
-          git diff --cached --quiet || git commit -m "Backup automático de base de datos [skip ci]"
-          git push
+          git diff-index --quiet HEAD || git commit -m "Backup automático de base de datos [skip ci]"
+          git pull origin master --rebase
+          git push origin master
