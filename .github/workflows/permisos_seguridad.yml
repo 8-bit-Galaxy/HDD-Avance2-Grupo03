@@ -1,5 +1,5 @@
 #Agregando el permisos_seguridad.yml
-#Prueba de seguridad
+#Prueba de permisos
 name: Verificar permisos inseguros
 
 on:
