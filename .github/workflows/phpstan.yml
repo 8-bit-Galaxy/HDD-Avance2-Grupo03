@@ -1,3 +1,4 @@
+#Agregando el phpstan.yml
 name: Análisis de código con PHPStan
 
 on:

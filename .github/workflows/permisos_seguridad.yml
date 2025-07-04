@@ -1,3 +1,4 @@
+#Agregando el permisos_seguridad.yml
 name: Verificar permisos inseguros
 
 on:

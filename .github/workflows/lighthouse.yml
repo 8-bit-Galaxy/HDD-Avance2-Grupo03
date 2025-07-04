@@ -1,3 +1,4 @@
+#agregando el lighthouse.yml
 name: Lighthouse Report
 
 on:
