@@ -1,0 +1,23 @@
+name: Proteger archivos de configuración
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  proteger-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Buscar archivos sensibles
+        run: |
+          echo "🔒 Buscando archivos sensibles..."
+          if test -f config_contra.php; then
+            echo "❌ Encontrado config_contra.php. No debería subirse información sensible."
+            exit 1
+          else
+            echo "✅ No se encontró config_contra.php. Todo OK."
+          fi

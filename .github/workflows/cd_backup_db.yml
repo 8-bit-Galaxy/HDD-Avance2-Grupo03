@@ -1,0 +1,33 @@
+name: Backup de base de datos
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  backup-db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Crear backup de shop_db.sql si existe
+        run: |
+          if test -f db/shop_db.sql; then
+            cp db/shop_db.sql db/backup_$(date +%Y%m%d_%H%M%S).sql
+            echo "Backup creado en carpeta db/"
+          else
+            echo "No se encontró el archivo db/shop_db.sql"
+          fi
+
+      - name: Configurar autor del commit
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Subir backup al repositorio
+        run: |
+          git add db/backup_*.sql
+          git diff --cached --quiet || git commit -m "Backup automático de base de datos [skip ci]"
+          git push
